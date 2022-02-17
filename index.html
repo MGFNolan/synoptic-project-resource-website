@@ -12,6 +12,8 @@
     crossorigin="anonymous">
 
     <title>Resource Library</title>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
   </head>
 
 <body>
@@ -29,7 +31,7 @@
             >
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div id="collapse navbar-collapse" id="toggleMobileMenu">
+            <div class="collapse navbar-collapse" id="toggleMobileMenu">
                 <ul class="navbar-nav ms-auto text-center">
                     <li>
                         <a class="nav-link" href="#">About</a>
@@ -46,7 +48,7 @@
 </div>
 
 <div class="container pb-5">
-<table class="table table-info">
+<table class="table table-info" id="inputTable">
     <thead>
       <tr>
         <th scope="col">#</th>
@@ -54,28 +56,28 @@
         <th scope="col">URL</th>
         <th scope="col">Rating (1-5)</th>
         <th scope="col">Tags</th>
-        <th scope="col">Comments</th>
+        <th scope="col">Description</th>
       </tr>
     </thead>
     <tbody>
       <tr>
         <th scope="row">1</th>
-        <td><input type="text"></td>
-        <td><input type="url"></td>
-        <td><input type="number"></td>
-        <td><input type="text"></td>
-        <td><input type="text"></td>
+        <td><input type="text" id="srcInput"></td>
+        <td><input type="url" id="urlInput"></td>
+        <td><input type="number" id="ratingInput"></td>
+        <td><input type="text" id="tagInput"></td>
+        <td><input type="text" id="descInput"></td>
       </tr>
     </tbody>
   </table>
   <div class="d-grid gap-2">
-      <button type="button" class="btn btn-primary">Add Resource</button>
+      <button type="button" class="btn btn-primary" id="addResourceBtn">Add Resource</button>
     </div>
   
 </div>
 
 <div class="container">
-    <table class="table table-hover">
+    <table class="table table-hover" id="resourceTable">
         <thead>
           <tr>
             <th scope="col">#</th>
@@ -83,41 +85,17 @@
             <th scope="col">URL</th>
             <th scope="col">Rating (1-5)</th>
             <th scope="col">Tags</th>
-            <th scope="col">Comments</th>
+            <th scope="col">Description</th>
           </tr>
         </thead>
-        <tbody>
-          <tr>
-            <th scope="row">1</th>
-            <td>freeCodeCamp</td>
-            <td><a href="freecodecamp.org">freeCodeCamp</a></td>
-            <td>5</td>
-            <td>HTML JavaScript CSS</td>
-            <td>Great resource</td>
-          </tr>
-          <tr>
-            <th scope="row">2</th>
-            <td>freeCodeCamp</td>
-            <td><a href="freecodecamp.org">freeCodeCamp</a></td>
-            <td>5</td>
-            <td>HTML JavaScript CSS</td>
-            <td>Great resource</td>
-          </tr>
-          <tr>
-            <th scope="row">3</th>
-            <td>freeCodeCamp</td>
-            <td><a href="freecodecamp.org">freeCodeCamp</a></td>
-            <td>5</td>
-            <td>HTML JavaScript CSS</td>
-            <td>Great resource</td>
-          </tr>
+        <tbody id="tableBody">
         </tbody>
       </table>
 </div>
 
+<script src="index.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" 
+integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" 
+crossorigin="anonymous"></script>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" 
-    integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" 
-    crossorigin="anonymous">
-    </script>
 </body>
