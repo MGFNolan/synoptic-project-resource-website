@@ -1,12 +1,13 @@
 const addResourceBtn = document.querySelector('#addResourceBtn');
-const resourceTable = document.querySelector('#tableBody')
-let rowNum = 0;
+const tabBody = document.querySelector('#tableBody');
+const resourceTab = document.querySelector('#resourceTable');
+let rowNum = tabBody.childElementCount;
 
-const srcName = document.querySelector('#srcInput')
-const urlInput = document.querySelector('#urlInput')
-const ratingInput = document.querySelector('#ratingInput')
-const tagInput = document.querySelector('#tagInput')
-const descInput = document.querySelector('#descInput')
+const srcName = document.querySelector('#srcInput');
+const urlInput = document.querySelector('#urlInput');
+const ratingInput = document.querySelector('#ratingInput');
+const tagInput = document.querySelector('#tagInput');
+const descInput = document.querySelector('#descInput');
 
 //URL EXTRACTION
 const getParam = (url) => {
@@ -28,16 +29,29 @@ addResourceBtn.addEventListener('click', () => {
         rowNum += 1;
 
         const template = 
-        `<tr> 
+        `<tr id="tabRow"> 
             <th scope="row">${rowNum}</th>
             <td>${source}</td>
             <td><a href="${url} target="_blank">${getParam(url)}</a></td>
             <td>${rating}</td>
             <td>${tag}</td>
             <td>${description}</td>
+            <td><button type="button" class="btn btn-danger delResourceBtn">Delete</button>
+            <button type="button" class="btn btn-warning editResourceBtn">Edit</button></td>
         </tr>
         `
 
-        resourceTable.innerHTML += template;
-        } alert("This URL is invalid. Try copy & pasting the URL.")
+        tabBody.innerHTML += template;
+        } else { alert("This URL is invalid. Try copy & pasting the URL.")
+    }
+})
+
+//REMOVE A SOURCE
+resourceTab.addEventListener('click', (e) => {
+    if(!e.target.classList.contains('delResourceBtn')) {
+        return;
+    }
+    const btn = e.target;
+    btn.closest('tr').remove();
+    rowNum -= 1;
 })
