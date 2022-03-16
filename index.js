@@ -31,12 +31,12 @@ addResourceBtn.addEventListener('click', () => {
         const template = 
         `<tr id="tabRow"> 
             <th scope="row">${rowNum}</th>
-            <td>${source}</td>
-            <td><a href="${url} target="_blank">${getParam(url)}</a></td>
-            <td>${rating}</td>
-            <td>${tag}</td>
-            <td>${description}</td>
-            <td><button type="button" class="btn btn-danger delResourceBtn">Delete</button>
+            <td class="col">${source}</td>
+            <td class="col"><a href="${url} target="_blank">${getParam(url)}</a></td>
+            <td class="col">${rating}</td>
+            <td class="col">${tag}</td>
+            <td class="col">${description}</td>
+            <td class="col"><button type="button" class="btn btn-danger delResourceBtn col">Delete</button>
             <button type="button" class="btn btn-warning editResourceBtn">Edit</button></td>
         </tr>
         `
