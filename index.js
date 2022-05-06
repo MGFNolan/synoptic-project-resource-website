@@ -1,3 +1,5 @@
+const database = require("./database.js");
+
 const addResourceBtn = document.querySelector('#addResourceBtn');
 const tabBody = document.querySelector('#tableBody');
 const resourceTab = document.querySelector('#resourceTable');
@@ -32,6 +34,7 @@ addResourceBtn.addEventListener('click', (e) => {
         //URL VALIDATION
         if(valid) {
             rowNum += 1; //you'd normally get this ID from the DB
+            //addSrcDb(source, url, rating, tag, description);
             const template = nonEditableRow(rowNum, source, url, rating, tag, description);
             tabBody.innerHTML += template;
             document.getElementById("addSourceForm").reset(); //reset the fields in the form
