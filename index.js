@@ -1,4 +1,4 @@
-const database = require("./database.js");
+// const database = require("./database.js");
 
 const addResourceBtn = document.querySelector('#addResourceBtn');
 const tabBody = document.querySelector('#tableBody');
