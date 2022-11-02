@@ -28,7 +28,7 @@ app.listen(port, () => {
 })
 
 app.get('/cat', (req, res) => {
-  const url = req.url
+  //const url = req.url
 
   //if (url === 'http://localhost:3000/cat') {
     res.writeHead(200, { 'content-type': 'text/html' })
@@ -39,7 +39,7 @@ app.get('/cat', (req, res) => {
 
 app.post('/item', (req, res) => {
   //res.writeHead(200, { 'content-type': 'text/json' })
-  console.log(req.body)
+  console.log(req)
   res.send(req.body)
   res.end()
 })

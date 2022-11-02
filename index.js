@@ -109,3 +109,18 @@ resourceTab.addEventListener('click', (e) => {
             return;
     }
 })
+
+async function test(){
+    console.log("Hello")
+    const response = await fetch('http://localhost:3000/item', {
+        method: "POST",
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+            item: "test",
+            item2: "test2",
+            itemInFrontOfMe: "Slinky"
+        })
+    })
+    const text = await response.json()
+    console.log(text)
+}
