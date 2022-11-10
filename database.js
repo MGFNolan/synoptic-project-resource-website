@@ -1,5 +1,5 @@
 const { Pool, Client } = require('pg')
-const client = new Client({
+const client = new Pool({
   user: "matthewnolan",
   host: "localhost",
   password: "postgres",
@@ -10,7 +10,6 @@ const client = new Client({
 
 //function for adding/creating source to database
 const addSrcDb = (sourceName, url, rating, tags, description) => {
-  client.connect();
   const text = 'INSERT INTO resources(source_name, url, rating, tags, description) VALUES($1, $2, $3, $4, $5) RETURNING *'
   const values = [sourceName, url, rating, tags, description]
 
@@ -20,7 +19,7 @@ client
   console.log(res.rows[0])
 })
 .catch(e => console.error(e.stack))
-.then(() => client.end())
+
 }
 
 //addSrcDb()
@@ -47,17 +46,12 @@ client
 
 
 //function for reading sources from database
-const readSrcDb = () => {
-  client.connect();
+const readSrcDb = async () => {
   const text = 'SELECT * FROM resources'
 
-client
+const databaseResult = await client
 .query(text)
-.then(res => {
-  console.log(res.rows)
-})
-.catch(e => console.error(e.stack))
-.then(() => client.end())
+return databaseResult.rows
 }
 
 //readSrcDb()

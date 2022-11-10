@@ -43,6 +43,7 @@ addResourceBtn.addEventListener("click", (e) => {
         description
       );
       tabBody.innerHTML += template;
+      test(source, url, rating, tag, description)
       document.getElementById("addSourceForm").reset(); //reset the fields in the form
     } else {
       //change text inside modal dialog
@@ -118,15 +119,17 @@ resourceTab.addEventListener("click", (e) => {
   }
 });
 
-async function test() {
+async function test(source, url, rating, tag, description) {
   console.log("Hello");
   const response = await fetch("http://localhost:3000/item", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
-      item: "test",
-      item2: "test2",
-      itemInFrontOfMe: "Slinky",
+      source: source,
+      url: url,
+      rating: rating,
+      tag: tag,
+      description: description,
     }),
   });
   const text = await response.json();
@@ -139,5 +142,25 @@ document.addEventListener("DOMContentLoaded", async function () {
     headers: { "Content-Type": "application/json" },
   });
   const text = await response.json();
-  console.log(text);
+  console.log(text)
+
+  for(i=0; i < text.length; i++) {
+
+    rowNum = text[i].id
+    source = text[i].source_name
+    url = text[i].url
+    rating = text[i].rating
+    tag = text[i].tags
+    description = text[i].description
+
+    const template = nonEditableRow(
+    rowNum,
+    source,
+    url,
+    rating,
+    tag,
+    description
+  );
+  tabBody.innerHTML += template;
+  }
 });
