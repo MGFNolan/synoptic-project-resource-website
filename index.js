@@ -32,8 +32,6 @@ addResourceBtn.addEventListener("click", (e) => {
     //Wouldn't it be great to run this validation onBlur? Might be an option...
     //URL VALIDATION
     if (valid) {
-      rowNum += 1; //you'd normally get this ID from the DB
-      //addSrcDb(source, url, rating, tag, description);
       const template = nonEditableRow(
         rowNum,
         source,
@@ -43,7 +41,7 @@ addResourceBtn.addEventListener("click", (e) => {
         description
       );
       tabBody.innerHTML += template;
-      test(source, url, rating, tag, description)
+      postSource(source, url, rating, tag, description);
       document.getElementById("addSourceForm").reset(); //reset the fields in the form
     } else {
       //change text inside modal dialog
@@ -119,7 +117,7 @@ resourceTab.addEventListener("click", (e) => {
   }
 });
 
-async function test(source, url, rating, tag, description) {
+async function postSource(source, url, rating, tag, description) {
   console.log("Hello");
   const response = await fetch("http://localhost:3000/item", {
     method: "POST",
@@ -142,25 +140,24 @@ document.addEventListener("DOMContentLoaded", async function () {
     headers: { "Content-Type": "application/json" },
   });
   const text = await response.json();
-  console.log(text)
+  console.log(text);
 
-  for(i=0; i < text.length; i++) {
-
-    rowNum = text[i].id
-    source = text[i].source_name
-    url = text[i].url
-    rating = text[i].rating
-    tag = text[i].tags
-    description = text[i].description
+  for (i = 0; i < text.length; i++) {
+    rowNum = text[i].id;
+    source = text[i].source_name;
+    url = text[i].url;
+    rating = text[i].rating;
+    tag = text[i].tags;
+    description = text[i].description;
 
     const template = nonEditableRow(
-    rowNum,
-    source,
-    url,
-    rating,
-    tag,
-    description
-  );
-  tabBody.innerHTML += template;
+      rowNum,
+      source,
+      url,
+      rating,
+      tag,
+      description
+    );
+    tabBody.innerHTML += template;
   }
 });
