@@ -8,43 +8,28 @@ const client = new Pool({
 });
 
 //function for adding/creating source to database
-const addSrcDb = (sourceName, url, rating, tags, description) => {
+const addSrcDb = async (sourceName, url, rating, tags, description) => {
   const text =
     "INSERT INTO resources(source_name, url, rating, tags, description) VALUES($1, $2, $3, $4, $5) RETURNING *";
   const values = [sourceName, url, rating, tags, description];
-
-  client
-    .query(text, values)
-    .then((res) => {
-      console.log(res.rows[0]);
-    })
-    .catch((e) => console.error(e.stack));
+  await client.query(text, values)
 };
 
-//addSrcDb()
 
 //function for deleting source to database
-const delSrcDb = (id) => {
-  client.connect();
+const delSrcDb = async (id) => {
   const text = "DELETE FROM resources WHERE id = $1";
   const values = [id];
 
-  client
-    .query(text, values)
-    .then((res) => {
-      console.log("Successfully deleted");
-    })
-    .catch((e) => console.error(e.stack))
-    .then(() => client.end());
-};
+  await client.query(text, values)
 
-//delSrcDb()
+};
 
 //function for reading sources from database
 const readSrcDb = async () => {
   const text = "SELECT * FROM resources";
-
   const databaseResult = await client.query(text);
+
   return databaseResult.rows;
 };
 

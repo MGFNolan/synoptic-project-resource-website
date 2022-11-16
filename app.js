@@ -15,8 +15,6 @@ app.listen(port, () => {
 });
 
 app.post("/item", (req, res) => {
-  console.log(req.body)
-
   source = req.body.source
   url = req.body.url
   rating = req.body.rating
@@ -25,8 +23,14 @@ app.post("/item", (req, res) => {
 
   addSrcDb(source, url, rating, tag, description)
   res.send({"response": "Successful"})
-
 });
+
+app.delete("/item/:id", (req, res) => {
+  const id = req.params.id;
+
+  delSrcDb(id)
+  res.send({response: `Item with ID ${id} has been deleted. Forever.`})
+})
 
 app.get("/list", async (req, res) => {
   databaseContents = await readSrcDb()

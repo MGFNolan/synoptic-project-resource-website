@@ -88,17 +88,14 @@ function editableRow(rowNum, source, url, rating, tag, description) {
 
 //REMOVE OR EDIT A SOURCE
 resourceTab.addEventListener("click", (e) => {
-  //CHANGED to use the element id rather than class
-  //because id is supposed to be unique, we could always append the
-  //rowNum to the ID, and check with "startsWith" rather than ==
-  //but this is good enough for now
-
   const btn = e.target;
 
   switch (e.target.getAttribute("id")) {
     case "delResourceBtn":
+      var fullRow = btn.closest("tr");
+      var rowId = fullRow.getAttribute("data-row-id");
+      delSource(rowId);
       btn.closest("tr").remove();
-      rowNum -= 1;
       break;
     case "editResourceBtn":
       var fullRow = btn.closest("tr");
@@ -118,7 +115,6 @@ resourceTab.addEventListener("click", (e) => {
 });
 
 async function postSource(source, url, rating, tag, description) {
-  console.log("Hello");
   const response = await fetch("http://localhost:3000/item", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -129,6 +125,15 @@ async function postSource(source, url, rating, tag, description) {
       tag: tag,
       description: description,
     }),
+  });
+  const text = await response.json();
+  console.log(text);
+}
+
+async function delSource(id) {
+  const response = await fetch(`http://localhost:3000/item/${id}`, {
+    method: "DELETE",
+    headers: { "Content-Type": "application/json" }
   });
   const text = await response.json();
   console.log(text);
