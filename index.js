@@ -57,7 +57,7 @@ addResourceBtn.addEventListener("click", (e) => {
 
 //we have split this out as we'll be reusing it
 function nonEditableRow(rowNum, source, url, rating, tag, description) {
-  return `<tr data-row-id="${rowNum}"> 
+  return `<tr data-row-id="${rowNum}" data-row-src="${source}" data-row-url="${url}" data-row-rating="${rating}" data-row-tag="${tag}" data-row-desc="${description}"> 
     <td id="rn_${rowNum}">${rowNum}</td>
     <td id="src_${rowNum}">${source}</td>
     <td id="url_${rowNum}"><a href="${url}" target="_blank">${getParam(
@@ -76,11 +76,11 @@ function nonEditableRow(rowNum, source, url, rating, tag, description) {
 function editableRow(rowNum, source, url, rating, tag, description) {
   return `<tr data-row-id="${rowNum}"> 
     <td>${rowNum}</td>
-    <td><input type="text" class="form-control">${source}</input></td>
-    <td><input type="text" class="form-control">${url}</input></td>
-    <td><input type="text" class="form-control">${rating}</input></td>
-    <td><input type="text" class="form-control">${tag}</input></td>
-    <td><input type="text" class="form-control">${description}</input></td>
+    <td><input type="text" class="form-control" value="${source}"></input></td>
+    <td><input type="text" class="form-control" value="${url}"></input></td>
+    <td><input type="text" class="form-control" value="${rating}"></input></td>
+    <td><input type="text" class="form-control" value="${tag}"></input></td>
+    <td><input type="text" class="form-control" value="${description}"></input></td>
     <td><button type="button" class="btn btn-danger col" id="cancelResourceBtn">Cancel</button>
     <button type="button" class="btn btn-warning" id="saveResourceBtn">Save</button></td>
 </tr>`;
@@ -99,14 +99,19 @@ resourceTab.addEventListener("click", (e) => {
       break;
     case "editResourceBtn":
       var fullRow = btn.closest("tr");
-      var rowId = fullRow.getAttribute("data-row-id"); //data attributes are very useful...
-      btn.closest("tr").innerHTML = editableRow(rowId, "", "", "", "", ""); //need to populate with the right values we get from the row....
+      var rowId = fullRow.getAttribute("data-row-id");
+      var src = fullRow.getAttribute("data-row-src");
+      var url = fullRow.getAttribute("data-row-url");
+      var rating = fullRow.getAttribute("data-row-rating");
+      var tag = fullRow.getAttribute("data-row-tag");
+      var desc = fullRow.getAttribute("data-row-desc"); //data attributes are very useful...
+      btn.closest("tr").innerHTML = editableRow(rowId, src, url, rating, tag, desc); //need to populate with the right values we get from the row....
       break;
     case "cancelResourceBtn":
       //HOW DO WE CANCEL? DO WE NEED TO STORE THE DATA FROM EDIT AND REVERT?
       //QUESTIOn - WHAT HAPPENS IF WE HAVE MANY ROWS EDITING AT THE SAME TIME?.....
       break;
-    case "saveResourtceBtn":
+    case "saveResourceBtn":
       //NEED TO SAVE HERE
       break;
     default:
