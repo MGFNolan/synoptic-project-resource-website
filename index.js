@@ -3,7 +3,7 @@
 const addResourceBtn = document.querySelector("#addResourceBtn");
 const tabBody = document.querySelector("#tableBody");
 const resourceTab = document.querySelector("#resourceTable");
-let rowNum = tabBody.childElementCount;
+let rowId = tabBody.childElementCount;
 
 const srcName = document.querySelector("#srcInput");
 const urlInput = document.querySelector("#urlInput");
@@ -33,7 +33,7 @@ addResourceBtn.addEventListener("click", (e) => {
     //URL VALIDATION
     if (valid) {
       const template = nonEditableRow(
-        rowNum,
+        rowId,
         source,
         url,
         rating,
@@ -56,16 +56,16 @@ addResourceBtn.addEventListener("click", (e) => {
 });
 
 //we have split this out as we'll be reusing it
-function nonEditableRow(rowNum, source, url, rating, tag, description) {
-  return `<tr data-row-id="${rowNum}" data-row-src="${source}" data-row-url="${url}" data-row-rating="${rating}" data-row-tag="${tag}" data-row-desc="${description}"> 
-    <td id="rn_${rowNum}">${rowNum}</td>
-    <td id="src_${rowNum}">${source}</td>
-    <td id="url_${rowNum}"><a href="${url}" target="_blank">${getParam(
+function nonEditableRow(rowId, source, url, rating, tag, description) {
+  return `<tr data-row-id="${rowId}" data-row-src="${source}" data-row-url="${url}" data-row-rating="${rating}" data-row-tag="${tag}" data-row-desc="${description}"> 
+    <td id="rn_${rowId}">${rowId}</td>
+    <td id="src_${rowId}">${source}</td>
+    <td id="url_${rowId}"><a href="${url}" target="_blank">${getParam(
     url
   )}</a></td>
-    <td id="rtg_${rowNum}">${rating}</td>
-    <td id="tag_${rowNum}">${tag}</td>
-    <td id="desc_${rowNum}">${description}</td>
+    <td id="rtg_${rowId}">${rating}</td>
+    <td id="tag_${rowId}">${tag}</td>
+    <td id="desc_${rowId}">${description}</td>
     <td><button type="button" class="btn btn-danger col" id="delResourceBtn">Delete</button>
     <button type="button" class="btn btn-warning" id="editResourceBtn">Edit</button></td>
 </tr>`;
@@ -100,16 +100,35 @@ resourceTab.addEventListener("click", (e) => {
     case "editResourceBtn":
       var fullRow = btn.closest("tr");
       var rowId = fullRow.getAttribute("data-row-id");
+      sessionStorage.setItem('id', rowId);
+
       var src = fullRow.getAttribute("data-row-src");
+      sessionStorage.setItem('source', src);
+
       var url = fullRow.getAttribute("data-row-url");
+      sessionStorage.setItem('url', url);
+
       var rating = fullRow.getAttribute("data-row-rating");
+      sessionStorage.setItem('rating', rating);
+
       var tag = fullRow.getAttribute("data-row-tag");
-      var desc = fullRow.getAttribute("data-row-desc"); //data attributes are very useful...
-      btn.closest("tr").innerHTML = editableRow(rowId, src, url, rating, tag, desc); //need to populate with the right values we get from the row....
+      sessionStorage.setItem('tags', tag);
+
+      var desc = fullRow.getAttribute("data-row-desc");
+      sessionStorage.setItem('description', desc);
+
+      btn.closest("tr").innerHTML = editableRow(rowId, src, url, rating, tag, desc); 
       break;
     case "cancelResourceBtn":
-      //HOW DO WE CANCEL? DO WE NEED TO STORE THE DATA FROM EDIT AND REVERT?
-      //QUESTIOn - WHAT HAPPENS IF WE HAVE MANY ROWS EDITING AT THE SAME TIME?.....
+
+      var rowId = sessionStorage.getItem('id');
+      var src = sessionStorage.getItem('source');
+      var url = sessionStorage.getItem('url');
+      var rating = sessionStorage.getItem('rating');
+      var tag = sessionStorage.getItem('tags');
+      var desc = sessionStorage.getItem('description');
+
+      btn.closest("tr").innerHTML = nonEditableRow(rowId, src, url, rating, tag, desc); 
       break;
     case "saveResourceBtn":
       //NEED TO SAVE HERE
@@ -153,7 +172,7 @@ document.addEventListener("DOMContentLoaded", async function () {
   console.log(text);
 
   for (i = 0; i < text.length; i++) {
-    rowNum = text[i].id;
+    rowId = text[i].id;
     source = text[i].source_name;
     url = text[i].url;
     rating = text[i].rating;
@@ -161,7 +180,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     description = text[i].description;
 
     const template = nonEditableRow(
-      rowNum,
+      rowId,
       source,
       url,
       rating,
