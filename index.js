@@ -129,6 +129,7 @@ resourceTab.addEventListener("click", (e) => {
       var desc = sessionStorage.getItem('description');
 
       btn.closest("tr").innerHTML = nonEditableRow(rowId, src, url, rating, tag, desc); 
+      sessionStorage.clear()
       break;
     case "saveResourceBtn":
       //NEED TO SAVE HERE
