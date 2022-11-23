@@ -12,17 +12,15 @@ const addSrcDb = async (sourceName, url, rating, tags, description) => {
   const text =
     "INSERT INTO resources(source_name, url, rating, tags, description) VALUES($1, $2, $3, $4, $5) RETURNING *";
   const values = [sourceName, url, rating, tags, description];
-  await client.query(text, values)
+  await client.query(text, values);
 };
-
 
 //function for deleting source to database
 const delSrcDb = async (id) => {
   const text = "DELETE FROM resources WHERE id = $1";
   const values = [id];
 
-  await client.query(text, values)
-
+  await client.query(text, values);
 };
 
 //function for reading sources from database
@@ -34,19 +32,12 @@ const readSrcDb = async () => {
 };
 
 //function for updating sources in the database
-const upSrcDb = (id, sourceName, url, rating, tags, description) => {
-  client.connect();
+const upSrcDb = async (id, sourceName, url, rating, tags, description) => {
   const text =
-    "UPDATE resources SET source_name = $1, url = $2, rating = $3, tags = $4, description = $5 WHERE id = 5";
-  const values = [sourceName, url, rating, tags, description];
+    "UPDATE resources SET source_name = $1, url = $2, rating = $3, tags = $4, description = $5 WHERE id = $6";
+  const values = [sourceName, url, rating, tags, description, id];
 
-  client
-    .query(text, values)
-    .then((res) => {
-      console.log(res.rows);
-    })
-    .catch((e) => console.error(e.stack))
-    .then(() => client.end());
+  await client.query(text, values);
 };
 
 //upSrcDb()

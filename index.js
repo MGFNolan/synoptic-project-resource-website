@@ -73,14 +73,14 @@ function nonEditableRow(rowId, source, url, rating, tag, description) {
 
 //this is our editable row, we just need to pass the parameters to it
 //QUESTION - HOW DO WE DO VALIDATION ON EDITING?????
-function editableRow(rowNum, source, url, rating, tag, description) {
-  return `<tr data-row-id="${rowNum}"> 
-    <td>${rowNum}</td>
-    <td><input type="text" class="form-control" value="${source}"></input></td>
-    <td><input type="text" class="form-control" value="${url}"></input></td>
-    <td><input type="text" class="form-control" value="${rating}"></input></td>
-    <td><input type="text" class="form-control" value="${tag}"></input></td>
-    <td><input type="text" class="form-control" value="${description}"></input></td>
+function editableRow(rowId, source, url, rating, tag, description) {
+  return `<tr data-row-id="${rowId}"> 
+    <td>${rowId}</td>
+    <td><input id="source${rowId}" type="text" class="form-control" value="${source}"></input></td>
+    <td><input id="url${rowId}" type="text" class="form-control" value="${url}"></input></td>
+    <td><input id="rating${rowId}" type="text" class="form-control" value="${rating}"></input></td>
+    <td><input id="tag${rowId}" type="text" class="form-control" value="${tag}"></input></td>
+    <td><input id="description${rowId}" type="text" class="form-control" value="${description}"></input></td>
     <td><button type="button" class="btn btn-danger col" id="cancelResourceBtn">Cancel</button>
     <button type="button" class="btn btn-warning" id="saveResourceBtn">Save</button></td>
 </tr>`;
@@ -92,47 +92,90 @@ resourceTab.addEventListener("click", (e) => {
 
   switch (e.target.getAttribute("id")) {
     case "delResourceBtn":
-      var fullRow = btn.closest("tr");
-      var rowId = fullRow.getAttribute("data-row-id");
-      delSource(rowId);
+      const fullRowDel = btn.closest("tr");
+      const rowIdDel = fullRowDel.getAttribute("data-row-id");
+      delSource(rowIdDel);
       btn.closest("tr").remove();
       break;
     case "editResourceBtn":
-      var fullRow = btn.closest("tr");
-      var rowId = fullRow.getAttribute("data-row-id");
-      sessionStorage.setItem('id', rowId);
+      const fullRowUpd = btn.closest("tr");
+      const rowIdUpd = fullRowUpd.getAttribute("data-row-id");
+      sessionStorage.setItem("id", rowIdUpd);
 
-      var src = fullRow.getAttribute("data-row-src");
-      sessionStorage.setItem('source', src);
+      const srcUpd = fullRowUpd.getAttribute("data-row-src");
+      sessionStorage.setItem("source", srcUpd);
 
-      var url = fullRow.getAttribute("data-row-url");
-      sessionStorage.setItem('url', url);
+      const urlUpd = fullRowUpd.getAttribute("data-row-url");
+      sessionStorage.setItem("url", urlUpd);
 
-      var rating = fullRow.getAttribute("data-row-rating");
-      sessionStorage.setItem('rating', rating);
+      const ratingUpd = fullRowUpd.getAttribute("data-row-rating");
+      sessionStorage.setItem("rating", ratingUpd);
 
-      var tag = fullRow.getAttribute("data-row-tag");
-      sessionStorage.setItem('tags', tag);
+      const tagUpd = fullRowUpd.getAttribute("data-row-tag");
+      sessionStorage.setItem("tags", tagUpd);
 
-      var desc = fullRow.getAttribute("data-row-desc");
-      sessionStorage.setItem('description', desc);
+      const descUpd = fullRowUpd.getAttribute("data-row-desc");
+      sessionStorage.setItem("description", descUpd);
 
-      btn.closest("tr").innerHTML = editableRow(rowId, src, url, rating, tag, desc); 
+      btn.closest("tr").innerHTML = editableRow(
+        rowIdUpd,
+        srcUpd,
+        urlUpd,
+        ratingUpd,
+        tagUpd,
+        descUpd
+      );
       break;
     case "cancelResourceBtn":
+      const rowIdCancel = sessionStorage.getItem("id");
+      const srcCancel = sessionStorage.getItem("source");
+      const urlCancel = sessionStorage.getItem("url");
+      const ratingCancel = sessionStorage.getItem("rating");
+      const tagCancel = sessionStorage.getItem("tags");
+      const descCancel = sessionStorage.getItem("description");
 
-      var rowId = sessionStorage.getItem('id');
-      var src = sessionStorage.getItem('source');
-      var url = sessionStorage.getItem('url');
-      var rating = sessionStorage.getItem('rating');
-      var tag = sessionStorage.getItem('tags');
-      var desc = sessionStorage.getItem('description');
-
-      btn.closest("tr").innerHTML = nonEditableRow(rowId, src, url, rating, tag, desc); 
-      sessionStorage.clear()
+      btn.closest("tr").innerHTML = nonEditableRow(
+        rowIdCancel,
+        srcCancel,
+        urlCancel,
+        ratingCancel,
+        tagCancel,
+        descCancel
+      );
+      sessionStorage.clear();
       break;
     case "saveResourceBtn":
-      //NEED TO SAVE HERE
+      const fullRowSave = btn.closest("tr");
+      const rowIdSave = fullRowSave.getAttribute("data-row-id");
+      console.log(rowIdSave);
+      const srcInputSave = document.querySelector(`#source${rowIdSave}`).value;
+      const urlInputSave = document.querySelector(`#url${rowIdSave}`).value;
+      const ratingInputSave = document.querySelector(
+        `#rating${rowIdSave}`
+      ).value;
+      const tagInputSave = document.querySelector(`#tag${rowIdSave}`).value;
+      const descInputSave = document.querySelector(
+        `#description${rowIdSave}`
+      ).value;
+
+      btn.closest("tr").innerHTML = nonEditableRow(
+        rowIdSave,
+        srcInputSave,
+        urlInputSave,
+        ratingInputSave,
+        tagInputSave,
+        descInputSave
+      );
+
+      updateSource(
+        srcInputSave,
+        urlInputSave,
+        ratingInputSave,
+        tagInputSave,
+        descInputSave,
+        rowIdSave
+      );
+
       break;
     default:
       return;
@@ -158,7 +201,24 @@ async function postSource(source, url, rating, tag, description) {
 async function delSource(id) {
   const response = await fetch(`http://localhost:3000/item/${id}`, {
     method: "DELETE",
-    headers: { "Content-Type": "application/json" }
+    headers: { "Content-Type": "application/json" },
+  });
+  const text = await response.json();
+  console.log(text);
+}
+
+async function updateSource(source, url, rating, tag, description, id) {
+  const response = await fetch(`http://localhost:3000/item/${id}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      source: source,
+      url: url,
+      rating: rating,
+      tag: tag,
+      description: description,
+      id: id,
+    }),
   });
   const text = await response.json();
   console.log(text);

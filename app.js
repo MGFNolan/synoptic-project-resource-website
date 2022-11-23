@@ -14,26 +14,38 @@ app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
 });
 
-app.post("/item", (req, res) => {
-  source = req.body.source
-  url = req.body.url
-  rating = req.body.rating
-  tag = [req.body.tag]
-  description = req.body.description
+app.put("/item/:id", (req, res) => {
+  source = req.body.source;
+  url = req.body.url;
+  rating = req.body.rating;
+  tag = [req.body.tag];
+  description = req.body.description;
+  id = req.body.id;
+  console.log(req.body);
+  upSrcDb(id, source, url, rating, tag, description);
+  res.send({ response: "Update successful" });
+});
 
-  addSrcDb(source, url, rating, tag, description)
-  res.send({"response": "Successful"})
+app.post("/item", (req, res) => {
+  source = req.body.source;
+  url = req.body.url;
+  rating = req.body.rating;
+  tag = [req.body.tag];
+  description = req.body.description;
+
+  addSrcDb(source, url, rating, tag, description);
+  res.send({ response: "Successful" });
 });
 
 app.delete("/item/:id", (req, res) => {
   const id = req.params.id;
 
-  delSrcDb(id)
-  res.send({response: `Item with ID ${id} has been deleted. Forever.`})
-})
+  delSrcDb(id);
+  res.send({ response: `Item with ID ${id} has been deleted. Forever.` });
+});
 
 app.get("/list", async (req, res) => {
-  databaseContents = await readSrcDb()
-  console.log(databaseContents)
-  res.send(databaseContents)
+  databaseContents = await readSrcDb();
+  console.log(databaseContents);
+  res.send(databaseContents);
 });
