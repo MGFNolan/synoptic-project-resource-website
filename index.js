@@ -95,6 +95,7 @@ resourceTab.addEventListener("click", (e) => {
       const fullRowDel = btn.closest("tr");
       const rowIdDel = fullRowDel.getAttribute("data-row-id");
       delSource(rowIdDel);
+      localStorage.setItem("id", rowIdDel);
       btn.closest("tr").remove();
       break;
     case "editResourceBtn":
