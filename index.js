@@ -94,9 +94,8 @@ resourceTab.addEventListener("click", (e) => {
     case "delResourceBtn":
       const fullRowDel = btn.closest("tr");
       const rowIdDel = fullRowDel.getAttribute("data-row-id");
-      delSource(rowIdDel);
-      localStorage.setItem("id", rowIdDel);
-      btn.closest("tr").remove();
+      window.location.href = `/confirm.html?id=${rowIdDel}`;
+      //delSource(rowIdDel);
       break;
     case "editResourceBtn":
       const fullRowUpd = btn.closest("tr");
@@ -199,13 +198,20 @@ async function postSource(source, url, rating, tag, description) {
   console.log(text);
 }
 
-async function delSource(id) {
-  const response = await fetch(`http://localhost:3000/item/${id}`, {
+async function delSource() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const myParam = urlParams.get("id");
+  const response = await fetch(`http://localhost:3000/item/${myParam}`, {
     method: "DELETE",
     headers: { "Content-Type": "application/json" },
   });
   const text = await response.json();
   console.log(text);
+  redirect();
+}
+
+function redirect() {
+  window.location.href = "/index.html";
 }
 
 async function updateSource(source, url, rating, tag, description, id) {
