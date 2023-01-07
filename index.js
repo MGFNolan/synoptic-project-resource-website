@@ -26,6 +26,7 @@ addResourceBtn.addEventListener("click", (e) => {
     const source = srcName.value;
     const rating = ratingInput.value;
     const tag = tagInput.value;
+    tag.split(" ");
     const description = descInput.value;
     let valid = /^(ftp|http|https):\/\/[^ "]+$/.test(url);
 
