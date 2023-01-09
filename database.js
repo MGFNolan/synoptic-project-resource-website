@@ -8,10 +8,16 @@ const client = new Pool({
 });
 
 //function for adding/creating source to database
-const addSrcDb = async (sourceName, url, rating, tags, description) => {
+const addSrcDb = async (sourceName, url, rating, description) => {
   const text =
-    "INSERT INTO resources(source_name, url, rating, tags, description) VALUES($1, $2, $3, $4, $5) RETURNING *";
-  const values = [sourceName, url, rating, tags, description];
+    "INSERT INTO resources(source_name, url, rating, description) VALUES($1, $2, $3, $4) RETURNING *";
+  const values = [sourceName, url, rating, description];
+  await client.query(text, values);
+};
+
+const addTagDb = async (tags) => {
+  const text = "INSERT INTO tags(tag_name) VALUES($1) RETURNING *";
+  const values = [tags];
   await client.query(text, values);
 };
 
@@ -42,4 +48,4 @@ const upSrcDb = async (id, sourceName, url, rating, tags, description) => {
 
 //upSrcDb()
 
-module.exports = { addSrcDb, delSrcDb, readSrcDb, upSrcDb };
+module.exports = { addSrcDb, delSrcDb, readSrcDb, upSrcDb, addTagDb };
