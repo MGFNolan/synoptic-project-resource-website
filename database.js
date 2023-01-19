@@ -29,25 +29,21 @@ const addSrcDb = async (sourceName, url, rating, description, tags) => {
 
 //function for deleting source to database
 const delSrcDb = async (id) => {
-  const text = "DELETE FROM resources WHERE id = $1";
-  const values = [id];
+  let text = "DELETE FROM resources WHERE id = $1";
+  let values = [id];
+  await client.query(text, values);
 
+  text = "DELETE FROM tags_resources WHERE resource_id = $1";
   await client.query(text, values);
 };
 
 //function for reading sources from database
 const readSrcDb = async () => {
-  const text = "SELECT * FROM resources";
+  let text =
+    "SELECT * FROM resources INNER JOIN tags_resources ON resource_id = resources.id";
   const databaseResult = await client.query(text);
 
-  return databaseResult.rows;
-};
-
-//function for reading sources from database
-const readTagDb = async () => {
-  const text = "SELECT * FROM tag_resources";
-  const databaseResult = await client.query(text);
-
+  console.log(databaseResult);
   return databaseResult.rows;
 };
 
@@ -67,5 +63,4 @@ module.exports = {
   delSrcDb,
   readSrcDb,
   upSrcDb,
-  readTagDb,
 };

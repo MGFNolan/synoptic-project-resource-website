@@ -30,10 +30,10 @@ app.post("/item", (req, res) => {
   source = req.body.source;
   url = req.body.url;
   rating = req.body.rating;
-  tag = req.body.tag;
+  tag = [req.body.tag];
   description = req.body.description;
 
-  tag = tag.split(" ");
+  //tag = tag.split(" ");
 
   addSrcDb(source, url, rating, description, tag);
   res.send({ response: "Successful" });
@@ -49,5 +49,6 @@ app.delete("/item/:id", (req, res) => {
 app.get("/list", async (req, res) => {
   databaseContents = await readSrcDb();
   console.log(databaseContents);
+
   res.send(databaseContents);
 });
