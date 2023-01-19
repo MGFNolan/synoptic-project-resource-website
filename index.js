@@ -238,7 +238,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     headers: { "Content-Type": "application/json" },
   });
   const text = await response.json();
-  console.log(text);
+  //console.log(text);
 
   for (i = 0; i < text.length; i++) {
     rowId = text[i].id;

@@ -8,16 +8,22 @@ const client = new Pool({
 });
 
 //function for adding/creating source to database
-const addSrcDb = async (sourceName, url, rating, description) => {
-  const text =
+const addSrcDb = async (sourceName, url, rating, description, tags) => {
+  let text =
     "INSERT INTO resources(source_name, url, rating, description) VALUES($1, $2, $3, $4) RETURNING *";
-  const values = [sourceName, url, rating, description];
-  await client.query(text, values);
-};
+  let values = [sourceName, url, rating, description];
+  let result = await client.query(text, values);
+  const srcId = result.rows[0].id;
 
-const addTagDb = async (tags) => {
-  const text = "INSERT INTO tags(tag_name) VALUES($1) RETURNING *";
-  const values = [tags];
+  text = "INSERT INTO tags(tag_name) VALUES($1) RETURNING *";
+  values = tags;
+  result = await client.query(text, values);
+  console.log(result);
+  const tagId = result.rows[0].tag_id;
+
+  text =
+    "INSERT INTO tags_resources(resource_id, tag_id) VALUES($1, $2) RETURNING *";
+  values = [srcId, tagId];
   await client.query(text, values);
 };
 
@@ -37,6 +43,14 @@ const readSrcDb = async () => {
   return databaseResult.rows;
 };
 
+//function for reading sources from database
+const readTagDb = async () => {
+  const text = "SELECT * FROM tag_resources";
+  const databaseResult = await client.query(text);
+
+  return databaseResult.rows;
+};
+
 //function for updating sources in the database
 const upSrcDb = async (id, sourceName, url, rating, tags, description) => {
   const text =
@@ -48,4 +62,10 @@ const upSrcDb = async (id, sourceName, url, rating, tags, description) => {
 
 //upSrcDb()
 
-module.exports = { addSrcDb, delSrcDb, readSrcDb, upSrcDb, addTagDb };
+module.exports = {
+  addSrcDb,
+  delSrcDb,
+  readSrcDb,
+  upSrcDb,
+  readTagDb,
+};

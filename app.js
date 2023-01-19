@@ -3,13 +3,7 @@ const app = express();
 //const { readFileSync } = require('fs');
 const bodyParser = require("body-parser");
 var cors = require("cors");
-const {
-  addSrcDb,
-  delSrcDb,
-  readSrcDb,
-  upSrcDb,
-  addTagDb,
-} = require("./database");
+const { addSrcDb, delSrcDb, readSrcDb, upSrcDb } = require("./database");
 const port = 3000;
 
 app.use(cors());
@@ -36,11 +30,12 @@ app.post("/item", (req, res) => {
   source = req.body.source;
   url = req.body.url;
   rating = req.body.rating;
-  tag = [req.body.tag];
+  tag = req.body.tag;
   description = req.body.description;
 
-  addSrcDb(source, url, rating, description);
-  addTagDb(tag);
+  tag = tag.split(" ");
+
+  addSrcDb(source, url, rating, description, tag);
   res.send({ response: "Successful" });
 });
 
