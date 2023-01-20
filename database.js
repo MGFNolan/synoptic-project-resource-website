@@ -39,8 +39,10 @@ const delSrcDb = async (id) => {
 
 //function for reading sources from database
 const readSrcDb = async () => {
-  let text =
-    "SELECT * FROM resources INNER JOIN tags_resources ON resource_id = resources.id";
+  let text = `SELECT resources.*, STRING_AGG(tags.tag_name, ',') AS tags FROM resources
+  LEFT JOIN tags_resources ON resource_id = resources.id
+  LEFT JOIN tags ON tags.tag_id = tags_resources.tag_id
+  GROUP BY 1`;
   const databaseResult = await client.query(text);
 
   console.log(databaseResult);
