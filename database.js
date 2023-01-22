@@ -14,17 +14,21 @@ const addSrcDb = async (sourceName, url, rating, description, tags) => {
   let values = [sourceName, url, rating, description];
   let result = await client.query(text, values);
   const srcId = result.rows[0].id;
+  tagsArr = tags.split(" ");
+  console.log(tagsArr);
 
-  text = "INSERT INTO tags(tag_name) VALUES($1) RETURNING *";
-  values = tags;
-  result = await client.query(text, values);
-  console.log(result);
-  const tagId = result.rows[0].tag_id;
+  tagsArr.forEach(async (tag) => {
+    let text = `INSERT INTO tags(tag_name) VALUES($1) WHERE tags.tag_name NOT IN VALUES($1) RETURNING *`;
+    let values = tag;
+    result = await client.query(text, values);
+    console.log(result);
+    const tagId = result.rows[0].tag_id;
 
-  text =
-    "INSERT INTO tags_resources(resource_id, tag_id) VALUES($1, $2) RETURNING *";
-  values = [srcId, tagId];
-  await client.query(text, values);
+    text =
+      "INSERT INTO tags_resources(resource_id, tag_id) VALUES($1, $2) RETURNING *";
+    values = [srcId, tagId];
+    await client.query(text, values);
+  });
 };
 
 //function for deleting source to database
