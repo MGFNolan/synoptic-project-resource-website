@@ -18,11 +18,19 @@ const addSrcDb = async (sourceName, url, rating, description, tags) => {
   console.log(tagsArr);
 
   tagsArr.forEach(async (tag) => {
-    let text = `INSERT INTO tags(tag_name) VALUES($1) WHERE tags.tag_name NOT IN VALUES($1) RETURNING *`;
-    let values = tag;
-    result = await client.query(text, values);
-    console.log(result);
-    const tagId = result.rows[0].tag_id;
+    let values = [tag];
+    let text = "SELECT * FROM tags WHERE tag_name = $1";
+    let result = await client.query(text, values);
+    let tagId;
+
+    if (result.rows.length == 0) {
+      text = `INSERT INTO tags(tag_name) VALUES($1) RETURNING *`;
+      result = await client.query(text, values);
+      console.log(result);
+      tagId = result.rows[0].tag_id;
+    } else {
+      tagId = result.rows[0].tag_id;
+    }
 
     text =
       "INSERT INTO tags_resources(resource_id, tag_id) VALUES($1, $2) RETURNING *";
@@ -43,7 +51,7 @@ const delSrcDb = async (id) => {
 
 //function for reading sources from database
 const readSrcDb = async () => {
-  let text = `SELECT resources.*, STRING_AGG(tags.tag_name, ',') AS tags FROM resources
+  let text = `SELECT resources.*, STRING_AGG(tags.tag_name, ' ') AS tags FROM resources
   LEFT JOIN tags_resources ON resource_id = resources.id
   LEFT JOIN tags ON tags.tag_id = tags_resources.tag_id
   GROUP BY 1`;
