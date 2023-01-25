@@ -18,10 +18,11 @@ app.put("/item/:id", (req, res) => {
   source = req.body.source;
   url = req.body.url;
   rating = req.body.rating;
-  tag = [req.body.tag];
+  tag = req.body.tag;
   description = req.body.description;
   id = req.body.id;
   console.log(req.body);
+
   upSrcDb(id, source, url, rating, tag, description);
   res.send({ response: "Update successful" });
 });
@@ -45,8 +46,17 @@ app.delete("/item/:id", (req, res) => {
 });
 
 app.get("/list", async (req, res) => {
-  databaseContents = await readSrcDb();
-  console.log(databaseContents);
+  const tags = req.query.tags;
+  //console.log(tags);
+  let databaseContents = "";
+
+  if (tags) {
+    databaseContents = await readSrcDb(tags);
+    console.log(tags);
+  } else {
+    databaseContents = await readSrcDb();
+    //console.log(databaseContents);
+  }
 
   res.send(databaseContents);
 });

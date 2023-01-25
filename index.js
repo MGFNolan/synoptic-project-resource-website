@@ -233,13 +233,22 @@ async function updateSource(source, url, rating, tag, description, id) {
 }
 
 document.addEventListener("DOMContentLoaded", async function () {
-  const response = await fetch("http://localhost:3000/list", {
+  await refreshSources("T3");
+});
+async function refreshSources(tags) {
+  let url = "";
+
+  if (tags) {
+    url = `http://localhost:3000/list?tags=${tags}`;
+  } else {
+    url = `http://localhost:3000/list`;
+  }
+  const response = await fetch(url, {
     method: "GET",
     headers: { "Content-Type": "application/json" },
   });
   const text = await response.json();
   //console.log(text);
-
   for (i = 0; i < text.length; i++) {
     rowId = text[i].id;
     source = text[i].source_name;
@@ -258,4 +267,4 @@ document.addEventListener("DOMContentLoaded", async function () {
     );
     tabBody.innerHTML += template;
   }
-});
+}
