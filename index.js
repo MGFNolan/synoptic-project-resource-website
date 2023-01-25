@@ -10,6 +10,7 @@ const urlInput = document.querySelector("#urlInput");
 const ratingInput = document.querySelector("#ratingInput");
 const tagInput = document.querySelector("#tagInput");
 const descInput = document.querySelector("#descInput");
+const filterTagsInput = document.querySelector("#filterTagsInput");
 
 //URL EXTRACTION
 const getParam = (url) => {
@@ -17,6 +18,11 @@ const getParam = (url) => {
   return parameter.hostname;
 };
 
+filterTagsBtn.addEventListener("click", async (e) => {
+  if (document.getElementById("filterTagsInput")) {
+    await refreshSources(filterTagsInput.value);
+  }
+});
 //ADDING A RESOURCE
 addResourceBtn.addEventListener("click", (e) => {
   // prevent default form submit if valid, otherwise, not prevent default behaviour so the HTML5 validation behaviour can take place
@@ -233,8 +239,9 @@ async function updateSource(source, url, rating, tag, description, id) {
 }
 
 document.addEventListener("DOMContentLoaded", async function () {
-  await refreshSources("T3");
+  await refreshSources();
 });
+
 async function refreshSources(tags) {
   let url = "";
 
@@ -243,11 +250,14 @@ async function refreshSources(tags) {
   } else {
     url = `http://localhost:3000/list`;
   }
+  console.log(url);
   const response = await fetch(url, {
     method: "GET",
     headers: { "Content-Type": "application/json" },
   });
   const text = await response.json();
+
+  tabBody.innerHTML = "";
   //console.log(text);
   for (i = 0; i < text.length; i++) {
     rowId = text[i].id;
