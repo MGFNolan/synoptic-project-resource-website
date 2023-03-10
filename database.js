@@ -1,10 +1,12 @@
+require("dotenv").config();
+
 const { Pool, Client } = require("pg");
 const client = new Pool({
-  user: "matthewnolan",
-  host: "localhost",
-  password: "postgres",
-  database: "resources",
-  port: 5432,
+  user: process.env.USER,
+  host: process.env.HOST,
+  password: process.env.PASSWORD,
+  database: process.env.DATABASE,
+  port: process.env.PORT,
 });
 
 //function for adding/creating source to database
